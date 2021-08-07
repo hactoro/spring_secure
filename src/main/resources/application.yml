@@ -1,0 +1,25 @@
+spring:
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views
+
+  jpa:
+    show-sql: true
+    hiberate:
+      format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+
+  datasource:
+    username: postgres
+    password: black1@@4
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/security
+
+
+server:
+  port: 9080
