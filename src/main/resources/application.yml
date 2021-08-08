@@ -1,5 +1,8 @@
 spring:
-#  mvc:
+  mvc:
+    view:
+      suffix: .html
+  #  mvc:
 #    view:
 #      prefix: /WEB-INF/views
 

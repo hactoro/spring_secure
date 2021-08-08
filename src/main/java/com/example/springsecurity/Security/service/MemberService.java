@@ -34,6 +34,10 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+
+        System.out.println("-----MemberService------loadUserByUsername------");
+        System.out.println("userEmail : " + userEmail);
+
         Optional<MemberEntity> userEntityWrapper = memberRepository.findByEmail(userEmail);
         MemberEntity userEntity = userEntityWrapper.get();
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/")
 public class MemberController {
 
     private MemberService memberService;
