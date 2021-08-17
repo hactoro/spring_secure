@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+</head>
+<body>
+    <div th:insert="header.html"></div>
+    <table>
+        <thead>
+            <tr>
+                <th><a th:href="@{post}">글쓰기</a></th>
+<!--                <th><a th:href="@{delete}">삭제</a></th>-->
+<!--                <th><a th:href="@{modify}">수정</a></th>-->
+            </tr>
+        </thead>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>내용</th>
+                <th>좋아요</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user:${list}">
+                <td><a th:href="@{'/board/modify/'+${user.getId()}}">
+                    <span th:text="${user.getTitle()}"></span>
+                </a></td>
+                <td><span th:text="${user.getWriter()}"></span></td>
+                <td><span th:text="${user.getContent()}"></span></td>
+                <td>
+                    <span th:text="${user.getLikeCount()}"></span>
+                    <form method="post" th:action="@{/board/like}">
+                        <input type="hidden" th:value="${user.getId()}" name="id">
+                        <input type="submit" value="제출">
+                    </form>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

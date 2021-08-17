@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>수정하기</title>
+</head>
+<body>
+  <form th:action="@{/board/modify}" method="post">
+      <input type="hidden" th:value="${boardDto.getId()}" name="id">
+    제목 : <input type="text" name="title" th:value="${boardDto.getTitle()}"><br>
+    작성자 : <input type="text" name="writer" th:value="${boardDto.getWriter()}"><br>
+    내용 : <textarea name="content" th:text="${boardDto.getContent()}"></textarea><br>
+    <input type="submit" value="수정">
+  </form>
+
+  <form th:action="@{/board/delete}" method="post">
+      <input type="hidden" th:value="${boardDto.getId()}" name="id">
+      <input type="submit" value="삭제">
+  </form>
+
+</body>
+</html>
