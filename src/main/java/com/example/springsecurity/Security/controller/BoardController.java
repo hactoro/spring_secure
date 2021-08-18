@@ -27,6 +27,7 @@ public class BoardController {
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("list", boardService.getList());
+        mv.addObject()
         mv.setViewName("/list");
 
         return mv;

@@ -1,11 +1,17 @@
 package com.example.springsecurity.Security.service;
 
 import com.example.springsecurity.Security.dto.BoardDto;
+import com.example.springsecurity.Security.dto.MemberDto;
 import com.example.springsecurity.Security.entity.BoardEntity;
 import com.example.springsecurity.Security.entity.LikeEntity;
+import com.example.springsecurity.Security.entity.MemberEntity;
+import com.example.springsecurity.Security.exception.JpaNotFoundCustomException;
 import com.example.springsecurity.Security.repository.BoardRepository;
 import com.example.springsecurity.Security.repository.LikeRepository;
+import com.example.springsecurity.Security.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +26,9 @@ public class BoardService {
 
     @Autowired
     LikeRepository likeRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     public List<BoardDto> getList(){
         List<BoardDto> boardDtos = new ArrayList<>();
@@ -39,7 +48,7 @@ public class BoardService {
             boardDto.setTitle(boardEntities.get(i).getTitle());
 
             try{
-                boardDto.setLikeCount(likeRepository.findById(boardEntities.get(i).getId()).orElseThrow().getCount());
+                boardDto.setLikeCount(likeRepository.findById(boardEntities.get(i).getId()).orElseThrow(Exception::new).getCount());
             }catch(Exception e){
                 System.out.println("something wrong in get like-count");
             }
@@ -56,9 +65,17 @@ public class BoardService {
 
     @Transactional
     public void write(BoardDto boardDto){
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+
+        String username = userDetails.getUsername();
+
+
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setWriter(boardDto.getWriter());
         boardEntity.setTitle(boardDto.getTitle());
+        boardEntity.setLoginUser(username);
         boardEntity.setContent(boardDto.getContent());
 
         LikeEntity likeEntity = new LikeEntity();
@@ -73,20 +90,32 @@ public class BoardService {
     }
 
     public void modify(BoardDto boardDto){
-        BoardEntity boardEntity = new BoardEntity();
-        boardEntity = boardRepository.findById(boardDto.getId()).orElseThrow();
-        boardEntity.setContent(boardDto.getContent());
-        boardEntity.setWriter(boardDto.getWriter());
-        boardEntity.setTitle(boardDto.getTitle());
 
-        boardRepository.save(boardEntity);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
 
+        BoardEntity boardEntity = boardRepository.findById(boardDto.getId()).get();
+
+        if(boardEntity.getLoginUser().equals(userDetails.getUsername())) {
+
+            boardEntity.setContent(boardDto.getContent());
+            boardEntity.setWriter(boardDto.getWriter());
+            boardEntity.setTitle(boardDto.getTitle());
+
+            boardRepository.save(boardEntity);
+
+        }else{
+
+        }
     }
 
     public BoardDto findById(Long id) {
         BoardEntity boardEntity = new BoardEntity();
-        boardEntity = boardRepository.findById(id).orElseThrow(); // null 처리 기법 확인 필요.
-
+        try {
+            boardEntity = boardRepository.findById(id).orElseThrow(IllegalAccessException::new); // null 처리 기법 확인 필요.
+        }catch(Exception e) {
+            System.out.println(e.toString());
+        }
         BoardDto boardDto = new BoardDto();
         boardDto.setId(boardEntity.getId());
         boardDto.setTitle(boardEntity.getTitle());
@@ -107,6 +136,27 @@ public class BoardService {
         LikeEntity likeEntity = boardRepository.getById(id).getLikeEntity();
         likeEntity.setCount(likeEntity.getCount() + 1);
         likeRepository.save(likeEntity);
+    }
+
+    public MemberDto getLoginUser(){
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+
+        String email = userDetails.getUsername();
+
+        MemberDto memberDto = new MemberDto();
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity = memberRepository.findByEmail(email).orElseThrow(
+            JpaNotFoundCustomException::new
+        );
+
+        memberEntity.builder()
+                .id(memberEntity.getId())
+                .email(memberEntity.getEmail())
+                .build();
+
+        return memberDto;
     }
 
 }

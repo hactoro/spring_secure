@@ -19,7 +19,7 @@ spring:
 
   datasource:
     username: postgres
-    password: black1@@4
+    password: sky1oo4
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/security
 

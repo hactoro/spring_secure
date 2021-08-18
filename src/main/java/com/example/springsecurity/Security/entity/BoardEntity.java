@@ -14,6 +14,7 @@ public class BoardEntity {
     private String title;
     private String writer;
     private String content;
+    private String loginUser; //로그인 user
 
     @OneToOne
     private LikeEntity likeEntity;
