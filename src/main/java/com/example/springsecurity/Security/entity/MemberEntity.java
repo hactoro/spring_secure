@@ -24,4 +24,6 @@ public class MemberEntity {
 
     @Column(length = 100, nullable = false)
     private String password;
+
+
 }

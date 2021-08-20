@@ -1,16 +1,20 @@
 package com.example.springsecurity.Security.controller;
 
 import com.example.springsecurity.Security.dto.BoardDto;
+import com.example.springsecurity.Security.dto.CompanyDto;
 import com.example.springsecurity.Security.repository.BoardRepository;
 import com.example.springsecurity.Security.repository.MemberRepository;
 import com.example.springsecurity.Security.service.BoardService;
+import com.example.springsecurity.Security.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 @Controller
@@ -22,12 +26,15 @@ public class BoardController {
     @Autowired
     BoardRepository boardRepository;
 
+    @Autowired
+    CompanyService companyService;
+
     @GetMapping("/board/list")
     public ModelAndView userList(){
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("list", boardService.getList());
-        mv.addObject()
+//        mv.addObject()
         mv.setViewName("/list");
 
         return mv;
@@ -72,4 +79,21 @@ public class BoardController {
         boardService.addLike(id);
         return "redirect:/board/list";
     }
+
+    @GetMapping("/enroll/company")
+    public String enrollCompany(CompanyDto companyDto){
+        return "enrollCompany";
+    }
+
+    @PostMapping("/enroll/company")
+    public String enrollCompany(@Valid CompanyDto companyDto, BindingResult result){
+        if(result.hasErrors()){
+
+        }else {
+            companyService.enrollCompany(companyDto);
+        }
+        return "enrollCompany";
+    }
+
+
 }

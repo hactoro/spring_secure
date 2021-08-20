@@ -1,16 +1,14 @@
 package com.example.springsecurity.Security.dto;
 
 import com.example.springsecurity.Security.entity.MemberEntity;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MemberDto {
     private Long id;
