@@ -5,25 +5,32 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Enroll Company</h1>
-    <form th:action="@{/enroll/company}" method="post" th:Object="${companyDto}">
-        <table>
-            <tr>
-                <td>회사명</td>
-                <td><input type="text" th:field="*{companyName}" placeholder="회사명을 입력해주세요"></td>
-                <td th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></td>
-            </tr>
-            <tr>
-                <td>사업자번호</td>
-                <td><input type="text" th:field="*{companyNum}" placeholder="사업자 번호를 입력해주세요"></td>
-                <td th:if="${#fields.hasErrors('companyNum')}" th:errors="*{companyNum}"></td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="제출">
-                </td>
-            </tr>
-        </table>
-    </form>
+    <th:block th:replace="fragment/header :: header"></th:block>
+    <div>
+        <h1>Enroll Company</h1>
+        <form th:action="@{/enroll/company}" method="post" th:Object="${companyDto}">
+            <table>
+                <tr>
+                    <td>회사명</td>
+                    <td><input type="text" th:field="*{companyName}" placeholder="회사명을 입력해주세요"></td>
+                    <td th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></td>
+                </tr>
+                <tr>
+                    <td>사업자번호</td>
+                    <td><input type="text" th:field="*{companyNum}" placeholder="사업자 번호를 입력해주세요"></td>
+                    <td th:if="${#fields.hasErrors('companyNum')}" th:errors="*{companyNum}"></td>
+                </tr>
+                <tr >
+                <!--                <td th:errors="*{user_massage}">what the hell</td>-->
+                    <td th:if="${#fields.hasErrors('systemMessage')}" th:errors="*{systemMessage}"> </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="제출">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </body>
 </html>

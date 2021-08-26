@@ -22,8 +22,10 @@ public class CompanyDto {
     private String companyName;
 
     @NotBlank(message = "반드시 입력해야합니다.")
-    @Size(min=10, max=10, message = "사업자번호는 10자리입니다.")
+//    @Size(min=10, max=10, message = "사업자번호는 10자리입니다.")
     private String companyNum;
+
+    private String systemMessage;
 
 //    @NonNull
 //    private String address;
